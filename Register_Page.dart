@@ -12,6 +12,7 @@ class RegisterPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
+        // Sayfanın arka planına resim eklendi.
         decoration: BoxDecoration(
           image: DecorationImage(
             image: AssetImage("assets/arkaplan.jpg"), //Burası Assets klasöründen alıyor resmii
@@ -20,11 +21,12 @@ class RegisterPage extends StatelessWidget {
         ),
         child: Center(
           child: Container(
-            color: Colors.white.withOpacity(0.3),
+            color: Colors.white.withOpacity(0.3),  // Opaklık ayarlandı
             padding: EdgeInsets.all(20.0),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                // Kayıt için form yapıldı.
                 Form(
                   key: formKey,
                   child: Column(
@@ -36,6 +38,7 @@ class RegisterPage extends StatelessWidget {
                           hintStyle: TextStyle(
                             color: Colors.white,
                           ),
+                          // Form textlerinin border özelliği ayarlandı.
                           enabledBorder: UnderlineInputBorder(
                             borderSide:
                             BorderSide(color: Colors.black, width: 1.3),
@@ -44,6 +47,7 @@ class RegisterPage extends StatelessWidget {
                         style: TextStyle(
                           color: Colors.white,
                         ),
+                        // Form validation yapıldı.
                         validator: (tfgirdisi) {
                           if (tfgirdisi?.isEmpty ?? true) {
                             return 'Kullanıcı adı boş bırakılamaz';
@@ -61,6 +65,7 @@ class RegisterPage extends StatelessWidget {
                           hintStyle: TextStyle(
                             color: Colors.white,
                           ),
+                          // Form textlerinin border özelliği ayarlandı.
                           enabledBorder: UnderlineInputBorder(
                             borderSide:
                             BorderSide(color: Colors.black, width: 1.3),
@@ -69,6 +74,7 @@ class RegisterPage extends StatelessWidget {
                         style: TextStyle(
                           color: Colors.white,
                         ),
+                         // Form validation yapıldı.
                         validator: (tfgirdisi) {
                           if (tfgirdisi?.isEmpty ?? true) {
                             return 'E-Mail boş bırakılamaz';
@@ -86,6 +92,7 @@ class RegisterPage extends StatelessWidget {
                           hintStyle: TextStyle(
                             color: Colors.white,
                           ),
+                          // Form textlerinin border özelliği ayarlandı.
                           enabledBorder: UnderlineInputBorder(
                             borderSide:
                             BorderSide(color: Colors.black, width: 1.3),
@@ -94,6 +101,7 @@ class RegisterPage extends StatelessWidget {
                         style: TextStyle(
                           color: Colors.white,
                         ),
+                         // Form validation yapıldı.
                         validator: (tfgirdisi) {
                           if (tfgirdisi?.isEmpty ?? true) {
                             return 'Şifre boş bırakılamaz';
@@ -111,14 +119,16 @@ class RegisterPage extends StatelessWidget {
                           hintStyle: TextStyle(
                             color: Colors.white,
                           ),
+                          // Form textlerinin border özelliği ayarlandı.
                           enabledBorder: UnderlineInputBorder(
                             borderSide:
                             BorderSide(color: Colors.black, width: 1.3),
                           ),
                         ),
                         style: TextStyle(
-                          color: Colors.white, // yazılan input
+                          color: Colors.white, // yazılan input rengi 
                         ),
+                         // Form validation yapıldı.
                         validator: (tfgirdisi) {
                           if (tfgirdisi?.isEmpty ?? true) {
                             return 'Şifre tekrarı boş bırakılamaz';
@@ -131,7 +141,7 @@ class RegisterPage extends StatelessWidget {
                       ),
                       SizedBox(
                         height: 20.0,
-                      ),
+                      ), // Form Kayıt butonu
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           primary: Colors.black,
@@ -144,8 +154,10 @@ class RegisterPage extends StatelessWidget {
                           ),
                         ),
                         child: Text('KAYIT'),
+                        // Butona tıklanınca yapılacak işlemler.
                         onPressed: () {
                           if (formKey.currentState?.validate() ?? false) {
+                            // Navigation ile başka sayfaya yönlendirme yapıldı.
                             Navigator.push(
                               context,
                               MaterialPageRoute(
