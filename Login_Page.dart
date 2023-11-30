@@ -15,37 +15,36 @@ class LoginPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
+         // Sayfanın arka planına resim eklendi.
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: NetworkImage(
-              'https://img.pixers.pics/pho_wat(s3:700/FO/22/58/88/62/0/700_FO225888620_c4dfb0a92674ddba576ab6272961bcb8,700,467,cms:2018/10/5bd1b6b8d04b8_220x50-watermark.png,over,480,417,jpg)/duvar-resimleri-sukran-gunu-yemegi-arka-plan.jpg.jpg',
-            ),
+            image: AssetImage("assets/arkaplan.jpg"), //Burası Assets klasöründen alıyor resmii
             fit: BoxFit.cover,
           ),
         ),
         child: Center(
           child: Container(
-            color: Colors.black.withOpacity(0.2),
+            color: Colors.black.withOpacity(0.2),  // Opaklık ayarlandı.
             padding: EdgeInsets.all(20.0),
             child: Form(
               key: formKey,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
-                //crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  // Form oluşturuldu.
                   TextFormField(
                     decoration: InputDecoration(
                       hintText: 'E-Mail',
                       hintStyle: TextStyle(
                         color: Colors.white,
-                      ),
+                      ), //Text borderları ayarlandı.
                       enabledBorder: UnderlineInputBorder(
                         borderSide: BorderSide(color: Colors.black, width: 1.3),
                       ),
                     ),
                     style: TextStyle(
                       color: Colors.white,
-                    ),
+                    ), // Form Validation yapıldı.
                     validator: (tfgirdisi) {
                       if (tfgirdisi?.isEmpty ?? true) {
                         return 'E-Mail boş bırakılamaz';
@@ -60,13 +59,14 @@ class LoginPage extends StatelessWidget {
                       hintStyle: TextStyle(
                         color: Colors.white,
                       ),
+                      //Text borderları ayarlandı.
                       enabledBorder: UnderlineInputBorder(
                         borderSide: BorderSide(color: Colors.black, width: 1.3),
                       ),
                     ),
                     style: TextStyle(
                       color: Colors.white,
-                    ),
+                    ), // Form Validation yapıldı.
                     validator: (tfgirdisi) {
                       if (tfgirdisi?.isEmpty ?? true) {
                         return 'Şifre boş bırakılamaz';
@@ -75,6 +75,7 @@ class LoginPage extends StatelessWidget {
                     },
                   ),
                   SizedBox(height: 20.0),
+                  // Form Giriş Butonu 
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       primary: Colors.black,
