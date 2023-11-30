@@ -88,6 +88,7 @@ class LoginPage extends StatelessWidget {
                       ),
                     ),
                     child: Text('GİRİŞ'),
+                    // Butona tıklanınca yapılacak işlemler.
                     onPressed: () {
                       if (formKey.currentState?.validate() ?? false) {
                           // Navigation ile başka sayfaya yönlendirme yapıldı.
