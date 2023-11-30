@@ -21,7 +21,7 @@ class _Sayfa2State extends State<Sayfa2> {
     return Column(
       children: <Widget>[
         for (String option in options)
-        // Listile yapısı kullanılarak option ve radio butonları hizalandı
+          // Listile yapısı kullanılarak option ve radio butonları hizalandı
           ListTile(
             contentPadding: EdgeInsets.symmetric(horizontal: 80, vertical: 10),
             title: Text(
