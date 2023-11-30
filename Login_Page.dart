@@ -3,12 +3,10 @@ import 'sayfa1.dart';
 
 class LoginPage extends StatelessWidget {
   var formKey = GlobalKey<FormState>();
-  //final String kullaniciAdi;
   final String mail;
   final String sifre;
 
-  LoginPage({
-    //required this.kullaniciAdi,
+  LoginPage({,
     required this.mail,
     required this.sifre,
   });
@@ -91,8 +89,7 @@ class LoginPage extends StatelessWidget {
                     child: Text('GİRİŞ'),
                     onPressed: () {
                       if (formKey.currentState?.validate() ?? false) {
-                        // Kayıt işlemleri burada gerçekleştirilebilir.
-                        // Yönlendirme işlemi:
+                          // Navigation ile başka sayfaya yönlendirme yapıldı.
                         Navigator.push(
                           context,
                           MaterialPageRoute(
