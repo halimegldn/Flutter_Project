@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'Login_Page.dart';
+import 'login_page.dart';
 
 class RegisterPage extends StatelessWidget {
   var formKey = GlobalKey<FormState>();
@@ -14,10 +14,7 @@ class RegisterPage extends StatelessWidget {
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: NetworkImage(
-              'https://img.pixers.pics/pho_wat(s3:700/FO/22/58/88/62/0/700_FO225888620_c4dfb0a92674ddba576ab6272961bcb8,700,467,cms:2018/10/5bd1b6b8d04b8_220x50-watermark.png,over,480,417,jpg)/duvar-resimleri-sukran-gunu-yemegi-arka-plan.jpg.jpg',
-            ),
-            //image: AssetImage("assets/arkaplan.jpg"), Burası Assets klasöründen alıyor resmii
+            image: AssetImage("assets/arkaplan.jpg"), //Burası Assets klasöründen alıyor resmii
             fit: BoxFit.cover,
           ),
         ),
@@ -41,7 +38,7 @@ class RegisterPage extends StatelessWidget {
                           ),
                           enabledBorder: UnderlineInputBorder(
                             borderSide:
-                                BorderSide(color: Colors.black, width: 1.3),
+                            BorderSide(color: Colors.black, width: 1.3),
                           ),
                         ),
                         style: TextStyle(
@@ -66,7 +63,7 @@ class RegisterPage extends StatelessWidget {
                           ),
                           enabledBorder: UnderlineInputBorder(
                             borderSide:
-                                BorderSide(color: Colors.black, width: 1.3),
+                            BorderSide(color: Colors.black, width: 1.3),
                           ),
                         ),
                         style: TextStyle(
@@ -91,7 +88,7 @@ class RegisterPage extends StatelessWidget {
                           ),
                           enabledBorder: UnderlineInputBorder(
                             borderSide:
-                                BorderSide(color: Colors.black, width: 1.3),
+                            BorderSide(color: Colors.black, width: 1.3),
                           ),
                         ),
                         style: TextStyle(
@@ -116,7 +113,7 @@ class RegisterPage extends StatelessWidget {
                           ),
                           enabledBorder: UnderlineInputBorder(
                             borderSide:
-                                BorderSide(color: Colors.black, width: 1.3),
+                            BorderSide(color: Colors.black, width: 1.3),
                           ),
                         ),
                         style: TextStyle(
@@ -153,7 +150,7 @@ class RegisterPage extends StatelessWidget {
                               context,
                               MaterialPageRoute(
                                 builder: (context) => LoginPage(
-                                  //kullaniciAdi: tfKullaniciAdi.text,
+                                  kullaniciAdi: tfKullaniciAdi.text,
                                   mail: tfMail.text,
                                   sifre: tfSifre.text,
                                 ),
