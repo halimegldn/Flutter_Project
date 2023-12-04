@@ -3,36 +3,38 @@ import 'Login_Page.dart';
 
 class RegisterPage extends StatelessWidget {
   var formKey = GlobalKey<FormState>();
-  var tfKullaniciAdi = TextEditingController();
-  var tfMail = TextEditingController();
-  var tfSifre = TextEditingController();
-  var tfTekrarSifre = TextEditingController();
+  var kullaniciAdiController = TextEditingController();
+  var mailController = TextEditingController();
+  var sifreController = TextEditingController();
+  var tekrarSifreController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
         // Sayfanın arka planına resim eklendi.
-        decoration: BoxDecoration(
+         decoration: BoxDecoration(
           image: DecorationImage(
             image: AssetImage("assets/arkaplan.jpg"), //Burası Assets klasöründen alıyor resmii
             fit: BoxFit.cover,
           ),
         ),
         child: Center(
+          //Sayfanın ortasına Container eklendi
           child: Container(
-            color: Colors.white.withOpacity(0.3),  // Opaklık ayarlandı
+            //Opaklık ayarlandı
+            color: Colors.white.withOpacity(0.3),
             padding: EdgeInsets.all(20.0),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                // Kayıt için form yapıldı.
+                //Container içine Form eklendi
                 Form(
                   key: formKey,
                   child: Column(
                     children: [
                       TextFormField(
-                        controller: tfKullaniciAdi,
+                        controller: kullaniciAdiController,
                         decoration: InputDecoration(
                           hintText: 'Kullanıcı Adı',
                           hintStyle: TextStyle(
@@ -41,15 +43,15 @@ class RegisterPage extends StatelessWidget {
                           // Form textlerinin border özelliği ayarlandı.
                           enabledBorder: UnderlineInputBorder(
                             borderSide:
-                            BorderSide(color: Colors.black, width: 1.3),
+                                BorderSide(color: Colors.black, width: 1.3),
                           ),
                         ),
                         style: TextStyle(
                           color: Colors.white,
                         ),
-                        // Form validation yapıldı.
-                        validator: (tfgirdisi) {
-                          if (tfgirdisi?.isEmpty ?? true) {
+                        //Form Validation yapıldı
+                        validator: (input) {
+                          if (input?.isEmpty ?? true) {
                             return 'Kullanıcı adı boş bırakılamaz';
                           }
                           return null;
@@ -59,7 +61,7 @@ class RegisterPage extends StatelessWidget {
                         height: 10.0,
                       ),
                       TextFormField(
-                        controller: tfMail,
+                        controller: mailController,
                         decoration: InputDecoration(
                           hintText: 'E-Mail',
                           hintStyle: TextStyle(
@@ -68,15 +70,15 @@ class RegisterPage extends StatelessWidget {
                           // Form textlerinin border özelliği ayarlandı.
                           enabledBorder: UnderlineInputBorder(
                             borderSide:
-                            BorderSide(color: Colors.black, width: 1.3),
+                                BorderSide(color: Colors.black, width: 1.3),
                           ),
                         ),
                         style: TextStyle(
                           color: Colors.white,
                         ),
-                         // Form validation yapıldı.
-                        validator: (tfgirdisi) {
-                          if (tfgirdisi?.isEmpty ?? true) {
+                        //Form Validation yapıldı
+                        validator: (input) {
+                          if (input?.isEmpty ?? true) {
                             return 'E-Mail boş bırakılamaz';
                           }
                           return null;
@@ -86,7 +88,7 @@ class RegisterPage extends StatelessWidget {
                         height: 10.0,
                       ),
                       TextFormField(
-                        controller: tfSifre,
+                        controller: sifreController,
                         decoration: InputDecoration(
                           hintText: 'Şifre',
                           hintStyle: TextStyle(
@@ -95,15 +97,15 @@ class RegisterPage extends StatelessWidget {
                           // Form textlerinin border özelliği ayarlandı.
                           enabledBorder: UnderlineInputBorder(
                             borderSide:
-                            BorderSide(color: Colors.black, width: 1.3),
+                                BorderSide(color: Colors.black, width: 1.3),
                           ),
                         ),
                         style: TextStyle(
                           color: Colors.white,
                         ),
-                         // Form validation yapıldı.
-                        validator: (tfgirdisi) {
-                          if (tfgirdisi?.isEmpty ?? true) {
+                        //Form Validation yapıldı
+                        validator: (input) {
+                          if (input?.isEmpty ?? true) {
                             return 'Şifre boş bırakılamaz';
                           }
                           return null;
@@ -113,7 +115,7 @@ class RegisterPage extends StatelessWidget {
                         height: 10.0,
                       ),
                       TextFormField(
-                        controller: tfTekrarSifre,
+                        controller: tekrarSifreController,
                         decoration: InputDecoration(
                           hintText: 'Şifreyi Tekrar Girin',
                           hintStyle: TextStyle(
@@ -122,18 +124,18 @@ class RegisterPage extends StatelessWidget {
                           // Form textlerinin border özelliği ayarlandı.
                           enabledBorder: UnderlineInputBorder(
                             borderSide:
-                            BorderSide(color: Colors.black, width: 1.3),
+                                BorderSide(color: Colors.black, width: 1.3),
                           ),
                         ),
                         style: TextStyle(
-                          color: Colors.white, // yazılan input rengi 
+                          color: Colors.white,
                         ),
-                         // Form validation yapıldı.
-                        validator: (tfgirdisi) {
-                          if (tfgirdisi?.isEmpty ?? true) {
+                        //Form Validation yapıldı
+                        validator: (input) {
+                          if (input?.isEmpty ?? true) {
                             return 'Şifre tekrarı boş bırakılamaz';
                           }
-                          if (tfgirdisi != tfSifre.text) {
+                          if (input != sifreController.text) {
                             return 'Şifreler uyuşmuyor';
                           }
                           return null;
@@ -141,7 +143,8 @@ class RegisterPage extends StatelessWidget {
                       ),
                       SizedBox(
                         height: 20.0,
-                      ), // Form Kayıt butonu
+                      ),
+                      //Kayıt butonu oluşturuldu
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           primary: Colors.black,
@@ -157,14 +160,13 @@ class RegisterPage extends StatelessWidget {
                         // Butona tıklanınca yapılacak işlemler.
                         onPressed: () {
                           if (formKey.currentState?.validate() ?? false) {
-                            // Navigation ile başka sayfaya yönlendirme yapıldı.
                             Navigator.push(
                               context,
                               MaterialPageRoute(
                                 builder: (context) => LoginPage(
-                                  kullaniciAdi: tfKullaniciAdi.text,
-                                  mail: tfMail.text,
-                                  sifre: tfSifre.text,
+                                  kullaniciAdi: kullaniciAdiController.text,
+                                  mail: mailController.text,
+                                  sifre: sifreController.text,
                                 ),
                               ),
                             );
@@ -182,3 +184,6 @@ class RegisterPage extends StatelessWidget {
     );
   }
 }
+
+
+
