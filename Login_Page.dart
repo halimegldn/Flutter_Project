@@ -3,11 +3,13 @@ import 'Page1.dart';
 
 class LoginPage extends StatelessWidget {
   var formKey = GlobalKey<FormState>();
-  // `mail` ve `sifre` parametreleri değişmez olarak tanımlandı
+  // "mail","sifre", "kullanıcı adı" parametreleri değişmez olarak tanımlandı
+  final String kullaniciAdi;
   final String mail;
   final String sifre;
 
   LoginPage({
+    required this.kullaniciAdi,
     required this.mail,
     required this.sifre,
   });
