@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
           backgroundColor: Color(0xFFB0BEC5),
           body: Column(
             children: [
-              //Tab ile yönlendirme yapıldı
+              //Sayfanın üst kısmında bulunan sekmeleri oluşturuldu
               TabBar(
                 tabs: [
                   Tab(text: 'Malzeme'),
@@ -27,6 +27,7 @@ class MyApp extends StatelessWidget {
               ),
               Expanded(
                 child: TabBarView(
+                  //Her bir sekme ile ilişkilendirilmiş içerikleri görüntülendi
                   children: [
                     Sayfa1(),
                     Sayfa2(),
