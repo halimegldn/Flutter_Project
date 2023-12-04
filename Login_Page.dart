@@ -8,7 +8,6 @@ class LoginPage extends StatelessWidget {
   final String sifre;
 
   LoginPage({
-    //required this.kullaniciAdi,
     required this.mail,
     required this.sifre,
   });
@@ -19,11 +18,11 @@ class LoginPage extends StatelessWidget {
       // Sayfanın arka planına resim eklendi
       body: Container(
         decoration: BoxDecoration(
-      image: DecorationImage(
-        image: AssetImage("assets/arkaplan.jpg"),
-        fit: BoxFit.cover,
-      ),
-    ),
+          image: DecorationImage(
+            image: AssetImage("assets/arkaplan.jpg"),
+            fit: BoxFit.cover,
+          ),
+        ),
         child: Center(
           // Sayfanın ortasına bir container eklendi
           child: Container(
