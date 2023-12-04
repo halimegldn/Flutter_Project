@@ -95,30 +95,35 @@ class _Sayfa1State extends State<Sayfa1> {
           //Girilecek malzeme sayısı kadar Malzeme texti ekleniyor
           for (int i = 0; i < malzemeControllers.length; i++)
             //Row ile yatay hizalama yapıldı
-            Row(
-              children: [
-                Expanded(
-                  child: TextFormField(
-                    style: TextStyle(color: Colors.white),
-                    controller: malzemeControllers[i],
-                    decoration: InputDecoration(
-                      labelText: 'Malzeme',
-                      labelStyle: TextStyle(color: Colors.black),
+            Container(
+              child: Row(
+                children: [
+                  Expanded(
+                    child: TextFormField(
+                      style: TextStyle(color: Colors.white),
+                      controller: malzemeControllers[i],
+                      decoration: InputDecoration(
+                        labelText: 'Malzeme',
+                        labelStyle: TextStyle(color: Colors.black),
+                      ),
                     ),
                   ),
-                ),
-                SizedBox(width: 5),
-                // Sil butonu
-                IconButton(
-                  icon: Icon(Icons.delete),
-                  onPressed: () {
-                    setState(() {
-                      malzemeControllers.removeAt(i);
-                    });
-                  },
-                ),
-              ],
+                  SizedBox(width: 5),
+                  // Sil butonu
+                  IconButton(
+                    // Sil butonuna padding ve margin ekleyebilirsiniz
+                    padding: EdgeInsets.all(8.0),
+                    onPressed: () {
+                      setState(() {
+                        malzemeControllers.removeAt(i);
+                      });
+                    },
+                    icon: Icon(Icons.delete),
+                  ),
+                ],
+              ),
             ),
+
           SizedBox(height: 40),
 
           // Arama Butonu
