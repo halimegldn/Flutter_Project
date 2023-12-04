@@ -25,7 +25,7 @@ class _Sayfa3State extends State<Sayfa3> {
                 decoration: InputDecoration(
                   labelText: 'Kalori Girin',
                   labelStyle: TextStyle(color: Colors.black, fontSize: 16),
-                  // Arkaplan rengi
+                  // Arkaplan rengi ayarlandı
                   filled: true,
                   fillColor: Colors.white,
                   border: OutlineInputBorder(
