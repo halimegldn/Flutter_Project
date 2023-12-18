@@ -3,9 +3,23 @@ import 'Page2.dart';
 import 'Page3.dart';
 import 'Page4.dart';
 
-void main() => runApp(MyApp());
+class Page1 extends StatefulWidget {
+  @override
+  _Page1State createState() => _Page1State();
+}
 
-class MyApp extends StatelessWidget {
+//Malzeme ekleme sayfası
+class _Page1State extends State<Page1> {
+  List<TextEditingController> malzemeControllers = [];
+
+  @override
+  void initState() {
+    super.initState();
+    // Başlangıçta 2 malzeme texti eklendi
+    malzemeControllers.add(TextEditingController());
+    malzemeControllers.add(TextEditingController());
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -16,7 +30,7 @@ class MyApp extends StatelessWidget {
           backgroundColor: Color(0xFFB0BEC5),
           body: Column(
             children: [
-              //Sayfanın üst kısmında bulunan sekmeleri oluşturuldu
+              //Sayfanın üst kısmında bulunan sekmeleri oluşturma işlemi
               TabBar(
                 tabs: [
                   Tab(text: 'Malzeme'),
@@ -27,9 +41,10 @@ class MyApp extends StatelessWidget {
               ),
               Expanded(
                 child: TabBarView(
-                  //Her bir sekme ile ilişkilendirilmiş içerikleri görüntülendi
+                  //Her bir sekme ile ilişkilendirilmiş içerikleri görüntüleme işlemi
                   children: [
-                    Sayfa1(),
+                    // Sayfa1 içeriği buraya eklenecek
+                    Sayfa1Content(malzemeControllers),
                     Sayfa2(),
                     Sayfa3(),
                     Sayfa4(),
@@ -44,22 +59,16 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class Sayfa1 extends StatefulWidget {
+class Sayfa1Content extends StatefulWidget {
+  final List<TextEditingController> malzemeControllers;
+
+  Sayfa1Content(this.malzemeControllers);
+
   @override
-  _Sayfa1State createState() => _Sayfa1State();
+  _Sayfa1ContentState createState() => _Sayfa1ContentState();
 }
 
-class _Sayfa1State extends State<Sayfa1> {
-  List<TextEditingController> malzemeControllers = [];
-
-  @override
-  void initState() {
-    super.initState();
-    // Başlangıçta 2 malzeme texti eklendi
-    malzemeControllers.add(TextEditingController());
-    malzemeControllers.add(TextEditingController());
-  }
-
+class _Sayfa1ContentState extends State<Sayfa1Content> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -80,7 +89,7 @@ class _Sayfa1State extends State<Sayfa1> {
               onPressed: () {
                 //Butona tıklanınca yeni malzeme text i ekleniyor
                 setState(() {
-                  malzemeControllers.add(TextEditingController());
+                  widget.malzemeControllers.add(TextEditingController());
                 });
               },
               child: Text(
@@ -90,10 +99,10 @@ class _Sayfa1State extends State<Sayfa1> {
             ),
           ),
 
-          SizedBox(height: 20), // 20 birim boşluk ekledik
+          SizedBox(height: 20),
 
           //Girilecek malzeme sayısı kadar Malzeme texti ekleniyor
-          for (int i = 0; i < malzemeControllers.length; i++)
+          for (int i = 0; i < widget.malzemeControllers.length; i++)
             //Row ile yatay hizalama yapıldı
             Container(
               child: Row(
@@ -101,7 +110,7 @@ class _Sayfa1State extends State<Sayfa1> {
                   Expanded(
                     child: TextFormField(
                       style: TextStyle(color: Colors.white),
-                      controller: malzemeControllers[i],
+                      controller: widget.malzemeControllers[i],
                       decoration: InputDecoration(
                         labelText: 'Malzeme',
                         labelStyle: TextStyle(color: Colors.black),
@@ -115,7 +124,7 @@ class _Sayfa1State extends State<Sayfa1> {
                     padding: EdgeInsets.all(8.0),
                     onPressed: () {
                       setState(() {
-                        malzemeControllers.removeAt(i);
+                        widget.malzemeControllers.removeAt(i);
                       });
                     },
                     icon: Icon(Icons.delete),
