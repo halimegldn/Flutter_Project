@@ -1,7 +1,7 @@
 // share_page.dart
 
 import 'package:flutter/material.dart';
-import 'setting.dart';
+import 'Setting.dart';
 
 class SharePage extends StatelessWidget {
   final String mealName;
