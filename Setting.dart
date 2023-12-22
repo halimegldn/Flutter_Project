@@ -7,9 +7,6 @@ class FavoritePage extends StatelessWidget {
 
   // Yemeği silen metod
   void deleteMeal(BuildContext context) {
-    // Silme işlemleri burada gerçekleştirilebilir.
-    // Örnek: Favori listesinden yemeği kaldırma
-
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text('$mealName adlı yemek silindi!'),
