@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'share_page.dart';
-import 'setting.dart';
+import 'Share_Page.dart';
+import 'Setting.dart';
 
 class Page1 extends StatefulWidget {
   @override
@@ -182,7 +182,7 @@ class MealListPage extends StatelessWidget {
                     children: [
                       SizedBox(height: 8),
                       Container(
-                        height: 180, // Resim yüksekliği ayarlanabilir
+                        height: 10, // Resim yüksekliği ayarlanabilir
                         child: mealData['resim_url'] != null
                             ? Image.network(
                                 mealData['resim_url'],
