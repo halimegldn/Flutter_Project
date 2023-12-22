@@ -1,36 +1,24 @@
 import 'package:flutter/material.dart';
-import 'Page2.dart';
-import 'Page3.dart';
-import 'Page4.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'share_page.dart';
+import 'setting.dart';
 
 class Page1 extends StatefulWidget {
   @override
   _Page1State createState() => _Page1State();
 }
 
-//Malzeme ekleme sayfası
 class _Page1State extends State<Page1> {
-  List<TextEditingController> malzemeControllers = [];
-
-  @override
-  void initState() {
-    super.initState();
-    // Başlangıçta 2 malzeme texti eklendi
-    malzemeControllers.add(TextEditingController());
-    malzemeControllers.add(TextEditingController());
-  }
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: DefaultTabController(
-        length: 4,
-        child: Scaffold(
-          backgroundColor: Color(0xFFB0BEC5),
-          body: Column(
+      home: Scaffold(
+        backgroundColor: Color(0xFFB0BEC5),
+        body: DefaultTabController(
+          length: 4,
+          child: Column(
             children: [
-              //Sayfanın üst kısmında bulunan sekmeleri oluşturma işlemi
               TabBar(
                 tabs: [
                   Tab(text: 'Malzeme'),
@@ -41,13 +29,11 @@ class _Page1State extends State<Page1> {
               ),
               Expanded(
                 child: TabBarView(
-                  //Her bir sekme ile ilişkilendirilmiş içerikleri görüntüleme işlemi
                   children: [
-                    // Sayfa1 içeriği buraya eklenecek
-                    Sayfa1Content(malzemeControllers),
-                    Sayfa2(),
-                    Sayfa3(),
-                    Sayfa4(),
+                    MealPage(),
+                    SecondPage(),
+                    ThirdPage(),
+                    FourthPage(),
                   ],
                 ),
               ),
@@ -59,102 +45,430 @@ class _Page1State extends State<Page1> {
   }
 }
 
-class Sayfa1Content extends StatefulWidget {
-  final List<TextEditingController> malzemeControllers;
-
-  Sayfa1Content(this.malzemeControllers);
-
+class MealPage extends StatefulWidget {
   @override
-  _Sayfa1ContentState createState() => _Sayfa1ContentState();
+  _MealPageState createState() => _MealPageState();
 }
 
-class _Sayfa1ContentState extends State<Sayfa1Content> {
+class _MealPageState extends State<MealPage> {
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  List<TextEditingController> malzemeControllers = [];
+
+  @override
+  void initState() {
+    super.initState();
+    malzemeControllers.add(TextEditingController());
+    malzemeControllers.add(TextEditingController());
+    malzemeControllers.add(TextEditingController());
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Color(0xFFB0BEC5),
-      padding: EdgeInsets.all(16.0),
-      child: Column(
+    return Scaffold(
+      backgroundColor: Color(0xFFB0BEC5),
+      body: Column(
         children: [
-          // + Butonu özellikleri
-          Container(
-            margin: EdgeInsets.fromLTRB(160, 20, 0, 20),
-            //Buton style özellikleri
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                primary: Color(0xFF535252),
-                shape: RoundedRectangleBorder(),
-                padding: EdgeInsets.all(18.0),
-              ),
-              onPressed: () {
-                //Butona tıklanınca yeni malzeme text i ekleniyor
-                setState(() {
-                  widget.malzemeControllers.add(TextEditingController());
-                });
-              },
-              child: Text(
-                '+',
-                style: TextStyle(fontSize: 16.0),
-              ),
-            ),
-          ),
-
-          SizedBox(height: 20),
-
-          //Girilecek malzeme sayısı kadar Malzeme texti ekleniyor
-          for (int i = 0; i < widget.malzemeControllers.length; i++)
-            //Row ile yatay hizalama yapıldı
-            Container(
-              child: Row(
-                children: [
-                  Expanded(
-                    child: TextFormField(
-                      style: TextStyle(color: Colors.white),
-                      controller: widget.malzemeControllers[i],
-                      decoration: InputDecoration(
-                        labelText: 'Malzeme',
-                        labelStyle: TextStyle(color: Colors.black),
-                      ),
-                    ),
-                  ),
-                  SizedBox(width: 5),
-                  // Sil butonu
-                  IconButton(
-                    // Sil butonuna padding ve margin ekleyebilirsiniz
-                    padding: EdgeInsets.all(8.0),
-                    onPressed: () {
-                      setState(() {
-                        widget.malzemeControllers.removeAt(i);
-                      });
-                    },
-                    icon: Icon(Icons.delete),
-                  ),
-                ],
-              ),
-            ),
-
-          SizedBox(height: 40),
-
-          // Arama Butonu
+          SizedBox(height: 16),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
-              backgroundColor: Color(0xFF535252),
-              //Buton Border ayarlandı
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(15.0),
-              ),
-              padding: EdgeInsets.symmetric(
-                vertical: 15.0,
-                horizontal: 40.0,
-              ),
+              primary: Color(0xFF535252),
+              shape: RoundedRectangleBorder(),
+              padding: EdgeInsets.all(18.0),
             ),
             onPressed: () {
-              // Butona tıklandığında yapılacak işlemler
+              setState(() {
+                malzemeControllers.add(TextEditingController());
+              });
             },
-            child: Text('Ara', style: TextStyle(fontSize: 18)),
+            child: Text(
+              '+',
+              style: TextStyle(fontSize: 16.0),
+            ),
+          ),
+          for (int i = 0; i < malzemeControllers.length; i++)
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextField(
+                controller: malzemeControllers[i],
+                decoration: InputDecoration(labelText: 'Malzeme ${i + 1}'),
+              ),
+            ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              primary: Color(0xFF535252),
+              shape: RoundedRectangleBorder(),
+              padding: EdgeInsets.all(18.0),
+            ),
+            onPressed: () => _onSearchButtonPressed(context),
+            child: Text('Ara'),
           ),
         ],
       ),
     );
+  }
+
+  void _onSearchButtonPressed(BuildContext context) async {
+    List<String> ingredients = [];
+    for (var controller in malzemeControllers) {
+      ingredients.add(controller.text);
+    }
+
+    var snapshot = await _firestore
+        .collection('meals')
+        .where('malzemeler', arrayContainsAny: ingredients)
+        .get();
+
+    List<DocumentSnapshot> meals = snapshot.docs;
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => MealListPage(meals),
+      ),
+    );
+  }
+}
+
+class MealListPage extends StatelessWidget {
+  final List<DocumentSnapshot> meals;
+
+  MealListPage(this.meals);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Color(0xFFFFCC80),
+      body: Column(
+        children: [
+          Expanded(
+            child: ListView.builder(
+              itemCount: meals.length,
+              itemBuilder: (context, index) {
+                var mealData = meals[index].data() as Map<String, dynamic>;
+
+                // Favori ve Paylaş ikonları ekleniyor
+                Widget trailingWidget = Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    IconButton(
+                      icon: Icon(Icons.favorite_border),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                FavoritePage(mealData['isim']),
+                          ),
+                        );
+                      },
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.share),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => SharePage(mealData['isim']),
+                          ),
+                        );
+                      },
+                    ),
+                  ],
+                );
+
+                return ListTile(
+                  title: Text(mealData['isim'] ?? ''),
+                  subtitle: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(height: 8),
+                      Container(
+                        height: 180, // Resim yüksekliği ayarlanabilir
+                        child: mealData['resim_url'] != null
+                            ? Image.network(
+                                mealData['resim_url'],
+                                fit: BoxFit.cover,
+                              )
+                            : SizedBox.shrink(),
+                      ),
+                      SizedBox(height: 8),
+                      Text('Kalori: ${mealData['kalori'] ?? ''}'),
+                      Text('Malzemeler: ${mealData['malzemeler'] ?? ''}'),
+                      Text('Tarif: ${mealData['tarif'] ?? ''}'),
+                      Text('Yemek Türü: ${mealData['yemek_turu'] ?? ''}'),
+                      Text(
+                          'Pişirme Süresi: ${mealData['pisime_s'] ?? ''} dakika'),
+                    ],
+                  ),
+                  trailing: trailingWidget,
+                );
+              },
+            ),
+          ),
+          Container(
+            padding: EdgeInsets.symmetric(vertical: 16),
+            color: Color(0xFFFFCC80),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment
+                  .spaceEvenly, // Center için spaceEvenly kullanılabilir.
+              children: [
+                IconButton(
+                  icon: Icon(Icons.home),
+                  onPressed: () {
+                    Navigator.pop(context); // Anasayfaya dön
+                  },
+                ),
+                IconButton(
+                  icon: Icon(Icons.search),
+                  onPressed: () {
+                    // Search ikonuna tıklandığında yapılacak işlemler buraya eklenebilir
+                  },
+                ),
+                IconButton(
+                  icon: Icon(Icons.settings),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            FavoritePage(''), // Favori sayfasına git
+                      ),
+                    );
+                  },
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class SecondPage extends StatefulWidget {
+  @override
+  _SecondPageState createState() => _SecondPageState();
+}
+
+class _SecondPageState extends State<SecondPage> {
+  List<String> selectedTypes = [];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Color(0xFF90A4AE),
+
+      // appBar: AppBar(
+      //   title: Text('Yemek Türü Seç'),
+      // ),
+      body: Column(
+        children: [
+          CheckboxListTile(
+            title: Text('Çorba'),
+            value: selectedTypes.contains('Çorba'),
+            onChanged: (value) => _onTypeSelected('Çorba', value ?? false),
+          ),
+          CheckboxListTile(
+            title: Text('Salata'),
+            value: selectedTypes.contains('Salata'),
+            onChanged: (value) => _onTypeSelected('Salata', value ?? false),
+          ),
+          CheckboxListTile(
+            title: Text('Ana Yemek'),
+            value: selectedTypes.contains('Ana Yemek'),
+            onChanged: (value) => _onTypeSelected('Ana Yemek', value ?? false),
+          ),
+          CheckboxListTile(
+            title: Text('Tatlı'),
+            value: selectedTypes.contains('Tatlı'),
+            onChanged: (value) => _onTypeSelected('Tatlı', value ?? false),
+          ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              primary: Color(0xFF535252),
+              shape: RoundedRectangleBorder(),
+              padding: EdgeInsets.all(18.0),
+            ),
+            onPressed: () => _onSearchButtonPressed(context),
+            child: Text('Ara'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _onTypeSelected(String type, bool selected) {
+    setState(() {
+      if (selected) {
+        selectedTypes.add(type);
+      } else {
+        selectedTypes.remove(type);
+      }
+    });
+  }
+
+  void _onSearchButtonPressed(BuildContext context) async {
+    if (selectedTypes.isNotEmpty) {
+      var snapshot = await FirebaseFirestore.instance
+          .collection('meals')
+          .where('yemek_turu', whereIn: selectedTypes)
+          .get();
+
+      List<DocumentSnapshot> meals = snapshot.docs;
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => MealListPage(meals),
+        ),
+      );
+    } else {
+      print('Lütfen en az bir yemek türü seçin.');
+    }
+  }
+}
+
+class ThirdPage extends StatefulWidget {
+  @override
+  _ThirdPageState createState() => _ThirdPageState();
+}
+
+class _ThirdPageState extends State<ThirdPage> {
+  TextEditingController calorieController = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Color(0xFF78909C),
+      body: Column(
+        children: [
+          SizedBox(height: 16),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextField(
+              controller: calorieController,
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(labelText: 'Kalori Sınırı'),
+            ),
+          ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              primary: Color(0xFF535252),
+              shape: RoundedRectangleBorder(),
+              padding: EdgeInsets.all(18.0),
+            ),
+            onPressed: () => _onSearchButtonPressed(context),
+            child: Text('Ara'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _onSearchButtonPressed(BuildContext context) async {
+    int enteredCalorie = int.tryParse(calorieController.text) ?? 0;
+
+    var snapshot = await FirebaseFirestore.instance
+        .collection('meals')
+        .where('kalori', isLessThanOrEqualTo: enteredCalorie)
+        .get();
+
+    List<DocumentSnapshot> meals = snapshot.docs;
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => MealListPage(meals),
+      ),
+    );
+  }
+}
+
+class FourthPage extends StatefulWidget {
+  @override
+  _FourthPageState createState() => _FourthPageState();
+}
+
+class _FourthPageState extends State<FourthPage> {
+  int selectedTime = 15;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Color(0xFF607D8B),
+      body: Column(
+        children: [
+          SizedBox(height: 16),
+          DropdownButton<int>(
+            value: selectedTime,
+            items: [
+              DropdownMenuItem(
+                value: 15,
+                child: Text('15-30 dakika'),
+              ),
+              DropdownMenuItem(
+                value: 30,
+                child: Text('30-45 dakika'),
+              ),
+              DropdownMenuItem(
+                value: 45,
+                child: Text('45-60 dakika'),
+              ),
+              DropdownMenuItem(
+                value: 60,
+                child: Text('60+ dakika'),
+              ),
+            ],
+            onChanged: (value) {
+              setState(() {
+                selectedTime = value!;
+              });
+            },
+          ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              primary: Color(0xFF535252),
+              shape: RoundedRectangleBorder(),
+              padding: EdgeInsets.all(18.0),
+            ),
+            onPressed: () => _onSearchButtonPressed(context),
+            child: Text('Ara'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _onSearchButtonPressed(BuildContext context) async {
+    print("Selected Time: $selectedTime");
+    var snapshot = await FirebaseFirestore.instance
+        .collection('meals')
+        .where('pisime_s', isGreaterThanOrEqualTo: 30, isLessThanOrEqualTo: 45)
+        .get();
+
+    List<DocumentSnapshot> meals = snapshot.docs;
+    print("Number of meals matching the criteria: ${meals.length}");
+
+    if (meals.isEmpty) {
+      // Eğer hiç yemek bulunamadıysa kullanıcıya bilgi ver
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text('Uyarı'),
+          content: Text('Belirtilen sürede yemek bulunamadı.'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text('Tamam'),
+            ),
+          ],
+        ),
+      );
+    } else {
+      // Eğer yemek bulunduysa MealListPage'e yönlendir
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => MealListPage(meals),
+        ),
+      );
+    }
   }
 }
