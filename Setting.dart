@@ -1,26 +1,40 @@
 import 'package:flutter/material.dart';
 
-void main() => runApp(MyApp());
+class FavoritePage extends StatelessWidget {
+  final String mealName;
 
-class MyApp extends StatelessWidget {
-  final List<String> kutucuklar = ['Favori1', 'Favori2'];
+  FavoritePage(this.mealName);
+
+  // Yemeği silen metod
+  void deleteMeal(BuildContext context) {
+    // Silme işlemleri burada gerçekleştirilebilir.
+    // Örnek: Favori listesinden yemeği kaldırma
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('$mealName adlı yemek silindi!'),
+        duration: Duration(seconds: 2),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        // Arka plan rengi
-        backgroundColor: Color(0xFFBBDEFB),
-        body: ListView(
-          padding: EdgeInsets.fromLTRB(16, 56, 16, 16),
-          children: <Widget>[
+    return Scaffold(
+      backgroundColor: Color(0xFF90CAF9),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
             Container(
-              color: Color(0xffBBDEFB),
+              //color: Color(0xffBBDEFB),
               height: 100,
-              // Lisetei yapısı ile profil oluşturuldu.
               child: ListTile(
-                leading: CircleAvatar(child: Icon(Icons.person), radius: 25),
+                leading: CircleAvatar(
+                  child: Icon(Icons.person),
+                  radius: 25,
+                ),
                 title: Container(
                   margin: EdgeInsets.only(left: 20),
                   child: Column(
@@ -29,7 +43,9 @@ class MyApp extends StatelessWidget {
                       Text(
                         "Halime GİLDAN",
                         style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold),
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                       Text(
                         "gldnhlm@gmail.com",
@@ -40,81 +56,56 @@ class MyApp extends StatelessWidget {
                 ),
               ),
             ),
-            Container(
-              padding: EdgeInsets.all(16),
-              child: Text(
-                'Favoriler',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
-            ),
-            // Kaç tane Favorilere eklenmiş eleman var ise o kadar Card oluşturur.
-            for (var kutucuk in kutucuklar)
-              // Daha düzenli hale getirmek için Card yapısı kullanıldı.
-              Card(
-                color: Color(0xFFBBDEFB),
-                margin: EdgeInsets.all(16),
-                child: ListTile(
-                  title: Text(kutucuk),
-                  trailing: Row(
-                    mainAxisSize: MainAxisSize.min,
+            SizedBox(height: 16),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Favori Yemeğiniz:',
+                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    // Silme işlevselliğini çağır
+                    deleteMeal(context);
+                  },
+                  child: Row(
                     children: [
-                      IconButton(
-                        icon: Icon(Icons.delete),
-                        color: Colors.black,
-                        onPressed: () {
-                          // Silme işlemi burada yapılacak
-                        },
-                      ),
-                      IconButton(
-                        icon: Icon(Icons.visibility),
-                        color: Color(0xFF0277BD),
-                        onPressed: () {
-                          // Görüntüleme işlemi burada yapılacak
-                        },
+                      Icon(Icons.delete, color: Colors.blue),
+                      SizedBox(width: 8),
+                      Text(
+                        'Sil',
+                        style: TextStyle(fontSize: 18, color: Colors.blue),
                       ),
                     ],
                   ),
                 ),
-              ),
-            //Ayarlar için container oluşturuldu.
-            Container(
-              padding: EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Ayarlar',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                  ),
-                  Text(
-                    'Şifre: 123456',
-                    style: TextStyle(fontSize: 16),
-                  ),
-                ],
-              ),
+              ],
             ),
-            Container(
-              padding: EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Çıkış Yap',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                  ),
-                  Row(
-                    children: [
-                      SizedBox(width: 10), // Bir boşluk ekleyebilirsiniz
-                      Icon(
-                        Icons.exit_to_app,
-                        size: 30,
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+            SizedBox(height: 16),
+            Text(
+              mealName,
+              style: TextStyle(fontSize: 18),
             ),
           ],
+        ),
+      ),
+      bottomNavigationBar: Container(
+        padding: EdgeInsets.all(16),
+        child: GestureDetector(
+          onTap: () {
+            // Çıkış işlevselliğini burada çağırabilirsiniz
+            // Örnek: Uygulamadan çıkış yapma
+          },
+          child: Row(
+            children: [
+              SizedBox(width: 10),
+              Icon(
+                Icons.exit_to_app,
+                size: 30,
+              ),
+            ],
+          ),
         ),
       ),
     );
