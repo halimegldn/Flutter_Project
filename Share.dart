@@ -1,88 +1,97 @@
+// share_page.dart
+
 import 'package:flutter/material.dart';
+import 'setting.dart';
 
-void main() => runApp(MyApp());
+class SharePage extends StatelessWidget {
+  final String mealName;
 
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: MyHomePage(),
-    );
-  }
-}
+  SharePage(this.mealName);
 
-class MyHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xFF90CAF9),
       body: Padding(
-        padding: EdgeInsets.fromLTRB(40, 120, 40, 50),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Text('Yemek Adı: $mealName'),
+            SizedBox(height: 16),
             TextField(
               decoration: InputDecoration(
-                labelText: 'E-Mail',
+                labelText: 'Mail Adresi',
                 filled: true,
                 fillColor: Color(0xFFBBDEFB),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15.0),
-                ),
+                contentPadding: EdgeInsets.all(16.0),
               ),
+              style: TextStyle(fontSize: 18.0),
+              textAlign: TextAlign.center,
             ),
-            SizedBox(height: 36),
+            SizedBox(height: 16),
             TextField(
-              maxLines: 4,
               decoration: InputDecoration(
                 labelText: 'Not',
                 filled: true,
                 fillColor: Color(0xFFBBDEFB),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15.0),
-                ),
+                contentPadding: EdgeInsets.all(16.0),
               ),
+              style: TextStyle(fontSize: 18.0),
+              textAlign: TextAlign.center,
             ),
-            SizedBox(height: 50),
-            // Gönderme butonu oluşturuldu.
+            SizedBox(height: 32),
             ElevatedButton(
+              onPressed: () {
+                // Paylaşma işlemleri burada gerçekleştirilebilir.
+              },
               style: ElevatedButton.styleFrom(
                 primary: Color(0xFFBBDEFB),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15.0),
-                ),
-                padding: EdgeInsets.symmetric(
-                  vertical: 16.0,
-                  horizontal: 32.0,
-                ),
+                padding: EdgeInsets.all(18.0),
               ),
               child: Text(
-                'Gönder',
-                style: TextStyle(fontSize: 20, color: Colors.black54),
+                'Paylaş',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18.0,
+                ),
               ),
-              onPressed: () {
-                //Butona tıklanınca yapılacak özellikler.
-              },
             ),
-            SizedBox(height: 50),
           ],
         ),
       ),
-      //Navigation için iconlar oluşturuldu.
-      bottomNavigationBar: BottomNavigationBar(
-        items: [
-          //Ayarlara gitmek için oluşturulan icon.
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Person',
-          ),
-          //Anasayfaya gitmek için oluşturulan icon.
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-        ],
-        backgroundColor: Color(0xFFBBDEFB),
+      bottomNavigationBar: Container(
+        padding: EdgeInsets.symmetric(vertical: 16),
+        color: Color(0xFF90CAF9),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            IconButton(
+              icon: Icon(Icons.home),
+              onPressed: () {
+                Navigator.pop(context); // Anasayfaya dön
+              },
+            ),
+            IconButton(
+              icon: Icon(Icons.search),
+              onPressed: () {
+                // Search ikonuna tıklandığında yapılacak işlemler buraya eklenebilir
+              },
+            ),
+            IconButton(
+              icon: Icon(Icons.settings),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        FavoritePage(''), // Favori sayfasına git
+                  ),
+                );
+              },
+            ),
+          ],
+        ),
       ),
     );
   }
