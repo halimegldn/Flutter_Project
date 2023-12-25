@@ -1,8 +1,7 @@
-// share_page.dart
-
 import 'package:flutter/material.dart';
 import 'Setting.dart';
 
+//Paylaşma sayfası
 class SharePage extends StatelessWidget {
   final String mealName;
 
@@ -19,6 +18,7 @@ class SharePage extends StatelessWidget {
           children: [
             Text('Yemek Adı: $mealName'),
             SizedBox(height: 16),
+            //Paylaşma işlemi için mail ve not girme işlemi
             TextField(
               decoration: InputDecoration(
                 labelText: 'Mail Adresi',
@@ -60,6 +60,7 @@ class SharePage extends StatelessWidget {
           ],
         ),
       ),
+      //Sayfanın altında bulunan Setting, Home, Search iconları
       bottomNavigationBar: Container(
         padding: EdgeInsets.symmetric(vertical: 16),
         color: Color(0xFF90CAF9),
