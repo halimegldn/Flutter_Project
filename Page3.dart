@@ -1,63 +1,62 @@
 import 'package:flutter/material.dart';
+import 'Page1.dart';
+import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-class Sayfa3 extends StatefulWidget {
+//Kalori sayfası
+class ThirdPage extends StatefulWidget {
   @override
-  _Sayfa3State createState() => _Sayfa3State();
+  _ThirdPageState createState() => _ThirdPageState();
 }
 
-class _Sayfa3State extends State<Sayfa3> {
+class _ThirdPageState extends State<ThirdPage> {
+  TextEditingController calorieController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xFF78909C),
-      //Container oluşturuldu
-      body: Container(
-        padding: EdgeInsets.all(20),
-        child: Column(
-          children: [
-            SizedBox(height: 90),
-            Align(
-              alignment: Alignment.centerRight,
-              child: TextField(
-                keyboardType: TextInputType.number,
-                //text style özellikleri belirlendi
-                style: TextStyle(color: Colors.black),
-                decoration: InputDecoration(
-                  labelText: 'Kalori Girin',
-                  labelStyle: TextStyle(color: Colors.black, fontSize: 16),
-                  // Arkaplan rengi ayarlandı
-                  filled: true,
-                  fillColor: Colors.white,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(15.0),
-                    borderSide: BorderSide(color: Colors.white),
-                  ),
-                  contentPadding: EdgeInsets.all(12.0),
-                ),
-              ),
+      body: Column(
+        children: [
+          SizedBox(height: 16),
+          //Kalori girmek için text oluşturma işlemi
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextField(
+              controller: calorieController,
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(labelText: 'Kalori Sınırı'),
             ),
-            SizedBox(
-              height: 150,
+          ),
+          //Arama butonu özellikleri
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              primary: Color(0xFF535252),
+              shape: RoundedRectangleBorder(),
+              padding: EdgeInsets.all(18.0),
             ),
-            //Arama butonu özellikleri
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Color(0xFF535252),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15.0),
-                ),
-                padding: EdgeInsets.symmetric(
-                  vertical: 15.0,
-                  horizontal: 40.0,
-                ),
-              ),
-              onPressed: () {
-                // Butona tıklandığında yapılacak işlemler
-              },
-              child: Text('Ara', style: TextStyle(fontSize: 18)),
-            ),
-          ],
-        ),
+            onPressed: () => _onSearchButtonPressed(context),
+            child: Text('Ara'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  //Firebase meals tablosunda kalori değeri girilen aralığın altında olan yemekleri arama işlemi
+  void _onSearchButtonPressed(BuildContext context) async {
+    int enteredCalorie = int.tryParse(calorieController.text) ?? 0;
+
+    var snapshot = await FirebaseFirestore.instance
+        .collection('meals')
+        .where('kalori', isLessThanOrEqualTo: enteredCalorie)
+        .get();
+
+    List<DocumentSnapshot> meals = snapshot.docs;
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => MealListPage(meals),
       ),
     );
   }
