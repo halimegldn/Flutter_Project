@@ -50,6 +50,7 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
+  //Giriş sayfası stil özellikleri
   @override
   Widget build(BuildContext context) {
     return Scaffold(
