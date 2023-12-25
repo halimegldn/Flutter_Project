@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'Login_Page.dart';
 import 'firebase_options.dart';
 
+//Firebase bağlantısı
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -28,11 +29,13 @@ class MyApp extends StatelessWidget {
   }
 }
 
+//Kayıt sayfası
 class RegisterPage extends StatefulWidget {
   @override
   _RegisterPageState createState() => _RegisterPageState();
 }
 
+//Kullanıcı bilgilerini alma işlemi
 class _RegisterPageState extends State<RegisterPage> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final TextEditingController _emailController = TextEditingController();
@@ -61,6 +64,7 @@ class _RegisterPageState extends State<RegisterPage> {
     }
   }
 
+  //Giriş sayfasına yönlendirme kodu
   void _showLoginPage() {
     Navigator.pushReplacement(
       context,
@@ -76,11 +80,13 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 
+  //Kayıt sayfası stil özellikleri
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: null,
       body: Container(
+        //Sayfanın arkaplan resmi
         decoration: BoxDecoration(
           image: DecorationImage(
             image: NetworkImage(
@@ -90,6 +96,7 @@ class _RegisterPageState extends State<RegisterPage> {
           color: Colors.black.withOpacity(0.3),
         ),
         child: Center(
+          //Kullanıcı bilgilerini alma işlemi
           child: Container(
             padding: const EdgeInsets.all(16.0),
             child: Column(
@@ -122,6 +129,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   obscureText: true,
                 ),
                 SizedBox(height: 16.0),
+                //Kayıt butonu
                 ElevatedButton(
                   onPressed: _register,
                   style: ElevatedButton.styleFrom(
@@ -137,6 +145,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   child: Text('Kayıt Ol'),
                 ),
                 SizedBox(height: 8.0),
+                //Kayıt butonuna tıklanınca yapılacak işlemler
                 TextButton(
                   onPressed: _goToLoginPage,
                   style: TextButton.styleFrom(
