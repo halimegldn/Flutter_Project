@@ -1,66 +1,87 @@
 import 'package:flutter/material.dart';
+import 'Page1.dart';
+import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-List<String> options = [
-  'Kahvaltı',
-  'Ana Yemek',
-  'Tatlı',
-  'Atıştırmalık',
-  'Çorba'
-];
-
-class Sayfa2 extends StatefulWidget {
+//Yemek türü sayfası
+class SecondPage extends StatefulWidget {
   @override
-  _Sayfa2State createState() => _Sayfa2State();
+  _SecondPageState createState() => _SecondPageState();
 }
 
-class _Sayfa2State extends State<Sayfa2> {
-  String currentOption = options[0]; // Default değeri atandı
-
+class _SecondPageState extends State<SecondPage> {
+  List<String> selectedTypes = [];
+  //checkbox ile yemeklerin tür adları ve radio butonlar oluşturuldu
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        for (String option in options)
-          // Listile yapısı kullanılarak option ve radio butonları hizalandı
-          ListTile(
-            contentPadding: EdgeInsets.symmetric(horizontal: 80, vertical: 10),
-            title: Text(
-              option,
-              style: TextStyle(fontSize: 20),
-            ),
-            //Radio butonu oluşturuldu
-            leading: Radio(
-              value: option,
-              groupValue: currentOption,
-              onChanged: (value) {
-                setState(() {
-                  currentOption = value.toString();
-                });
-              },
-            ),
+    return Scaffold(
+      backgroundColor: Color(0xFF90A4AE),
+      body: Column(
+        children: [
+          CheckboxListTile(
+            title: Text('Çorba'),
+            value: selectedTypes.contains('Çorba'),
+            onChanged: (value) => _onTypeSelected('Çorba', value ?? false),
           ),
-        SizedBox(
-          height: 25,
-        ),
-        //Arama butonu özellikleri
-        ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            primary: Color(
-                0xFF535252), // Burada primary ile arka plan rengini belirliyoruz
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(15.0),
-            ),
-            padding: EdgeInsets.symmetric(
-              vertical: 15.0,
-              horizontal: 40.0,
-            ),
+          CheckboxListTile(
+            title: Text('Salata'),
+            value: selectedTypes.contains('Salata'),
+            onChanged: (value) => _onTypeSelected('Salata', value ?? false),
           ),
-          onPressed: () {
-            // Butona tıklandığında yapılacak işlemler
-          },
-          child: Text('Ara', style: TextStyle(fontSize: 18)),
-        ),
-      ],
+          CheckboxListTile(
+            title: Text('Ana Yemek'),
+            value: selectedTypes.contains('Ana Yemek'),
+            onChanged: (value) => _onTypeSelected('Ana Yemek', value ?? false),
+          ),
+          CheckboxListTile(
+            title: Text('Tatlı'),
+            value: selectedTypes.contains('Tatlı'),
+            onChanged: (value) => _onTypeSelected('Tatlı', value ?? false),
+          ),
+
+          //Arama butonu özellikleri
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              primary: Color(0xFF535252),
+              shape: RoundedRectangleBorder(),
+              padding: EdgeInsets.all(18.0),
+            ),
+            onPressed: () => _onSearchButtonPressed(context),
+            child: Text('Ara'),
+          ),
+        ],
+      ),
     );
+  }
+
+  //Yemek türü aranıyor
+  void _onTypeSelected(String type, bool selected) {
+    setState(() {
+      if (selected) {
+        selectedTypes.add(type);
+      } else {
+        selectedTypes.remove(type);
+      }
+    });
+  }
+
+  //Firebase meals tablasonda arama işlemi yapılıyor
+  void _onSearchButtonPressed(BuildContext context) async {
+    if (selectedTypes.isNotEmpty) {
+      var snapshot = await FirebaseFirestore.instance
+          .collection('meals')
+          .where('yemek_turu', whereIn: selectedTypes)
+          .get();
+
+      List<DocumentSnapshot> meals = snapshot.docs;
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => MealListPage(meals),
+        ),
+      );
+    } else {
+      print('Lütfen en az bir yemek türü seçin.');
+    }
   }
 }
