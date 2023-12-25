@@ -1,80 +1,100 @@
 import 'package:flutter/material.dart';
+import 'Page1.dart';
+import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-class Sayfa4 extends StatefulWidget {
+//Pişme Süresi sayfası
+class FourthPage extends StatefulWidget {
   @override
-  _Sayfa4State createState() => _Sayfa4State();
+  _FourthPageState createState() => _FourthPageState();
 }
 
-class _Sayfa4State extends State<Sayfa4> {
-  String selectedValue = 'Pişirme Süresi'; // Varsayılan değer
+class _FourthPageState extends State<FourthPage> {
+  int selectedTime = 15;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Color(0xFF607D8B),
-      padding: EdgeInsets.all(70),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
+    return Scaffold(
+      backgroundColor: Color(0xFF607D8B),
+      body: Column(
         children: [
-          Container(
-            decoration: BoxDecoration(
-              color: Colors.white, // Beyaz arkaplan
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-            //Dropdownlist yapısı oluşturuldu
-            child: DropdownButton<String>(
-              // Seçili değeri ve değerin değişimini takip etmek için kullanılır
-              value: selectedValue,
-              onChanged: (newValue) {
-                setState(() {
-                  selectedValue = newValue!;
-                });
-              },
-              // Dropdown içerisindeki öğelerin listesi
-              items: [
-                'Pişirme Süresi',
-                '15-30 DK',
-                '30-45 DK',
-                '45-60 DK',
-                '60+ DK'
-              ].map<DropdownMenuItem<String>>((String value) {
-                // Her bir öğe için bir DropdownMenuItem oluşturuldu
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Container(
-                    padding: EdgeInsets.all(10), // İstediğiniz iç boşluk ayarı
-                    child: Text(
-                      value,
-                      style: TextStyle(color: Colors.black, fontSize: 18),
-                    ),
-                  ),
-                );
-              }).toList(),
-            ),
+          //Dropdownlist oluşturma işlemi
+          SizedBox(height: 16),
+          DropdownButton<int>(
+            value: selectedTime,
+            items: [
+              DropdownMenuItem(
+                value: 15,
+                child: Text('15-30 dakika'),
+              ),
+              DropdownMenuItem(
+                value: 30,
+                child: Text('30-45 dakika'),
+              ),
+              DropdownMenuItem(
+                value: 45,
+                child: Text('45-60 dakika'),
+              ),
+              DropdownMenuItem(
+                value: 60,
+                child: Text('60+ dakika'),
+              ),
+            ],
+            onChanged: (value) {
+              setState(() {
+                selectedTime = value!;
+              });
+            },
           ),
-          SizedBox(
-            height: 200,
-          ),
-          //Arama Butonu
+          //Arama butonu özellikleri
           ElevatedButton(
             style: ElevatedButton.styleFrom(
-              primary: Color(
-                  0xFF535252), // Burada primary ile arka plan rengini belirliyoruz
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(15.0),
-              ),
-              padding: EdgeInsets.symmetric(
-                vertical: 15.0,
-                horizontal: 40.0,
-              ),
+              primary: Color(0xFF535252),
+              shape: RoundedRectangleBorder(),
+              padding: EdgeInsets.all(18.0),
             ),
-            onPressed: () {
-              // Butona tıklandığında yapılacak işlemler
-            },
-            child: Text('Ara', style: TextStyle(fontSize: 18)),
+            onPressed: () => _onSearchButtonPressed(context),
+            child: Text('Ara'),
           ),
         ],
       ),
     );
+  }
+
+  //Firebase meals tablosunda arama işlemi
+  void _onSearchButtonPressed(BuildContext context) async {
+    print("Selected Time: $selectedTime");
+    var snapshot = await FirebaseFirestore.instance
+        .collection('meals')
+        .where('pisime_s', isGreaterThanOrEqualTo: 30, isLessThanOrEqualTo: 45)
+        .get();
+
+    List<DocumentSnapshot> meals = snapshot.docs;
+    print("Number of meals matching the criteria: ${meals.length}");
+
+    if (meals.isEmpty) {
+      // Eğer hiç yemek bulunamadıysa kullanıcıya bilgi ver
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text('Uyarı'),
+          content: Text('Belirtilen sürede yemek bulunamadı.'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text('Tamam'),
+            ),
+          ],
+        ),
+      );
+    } else {
+      // Eğer yemek bulunduysa MealListPage'e yönlendir
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => MealListPage(meals),
+        ),
+      );
+    }
   }
 }
