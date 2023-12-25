@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'Share_Page.dart';
 import 'Setting.dart';
+import 'Page2.dart';
+import 'Page3.dart';
+import 'Page4.dart';
 
 class Page1 extends StatefulWidget {
   @override
@@ -54,6 +57,7 @@ class _MealPageState extends State<MealPage> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   List<TextEditingController> malzemeControllers = [];
 
+  //Başlangıçta 3 malzeme text i eklendi
   @override
   void initState() {
     super.initState();
@@ -69,17 +73,20 @@ class _MealPageState extends State<MealPage> {
       body: Column(
         children: [
           SizedBox(height: 16),
+          //+ Butonu oluşturuldu
           ElevatedButton(
             style: ElevatedButton.styleFrom(
               primary: Color(0xFF535252),
               shape: RoundedRectangleBorder(),
               padding: EdgeInsets.all(18.0),
             ),
+            //+ Butonuna tıklanıldıkça text ekleme işlemi yapılıyor
             onPressed: () {
               setState(() {
                 malzemeControllers.add(TextEditingController());
               });
             },
+
             child: Text(
               '+',
               style: TextStyle(fontSize: 16.0),
@@ -93,6 +100,7 @@ class _MealPageState extends State<MealPage> {
                 decoration: InputDecoration(labelText: 'Malzeme ${i + 1}'),
               ),
             ),
+          //Arama butonu
           ElevatedButton(
             style: ElevatedButton.styleFrom(
               primary: Color(0xFF535252),
@@ -107,6 +115,7 @@ class _MealPageState extends State<MealPage> {
     );
   }
 
+  //Butona tıklanınca Firebase araması yapıyor
   void _onSearchButtonPressed(BuildContext context) async {
     List<String> ingredients = [];
     for (var controller in malzemeControllers) {
@@ -128,6 +137,7 @@ class _MealPageState extends State<MealPage> {
   }
 }
 
+//Yemeklerin çıktı sayfası
 class MealListPage extends StatelessWidget {
   final List<DocumentSnapshot> meals;
 
@@ -175,6 +185,8 @@ class MealListPage extends StatelessWidget {
                   ],
                 );
 
+                // ...
+                //Yemeklerin adları, resimler, türleri, malzemeleri, pişme süreleri ve tarifi gösteriliyor
                 return ListTile(
                   title: Text(mealData['isim'] ?? ''),
                   subtitle: Column(
@@ -182,11 +194,13 @@ class MealListPage extends StatelessWidget {
                     children: [
                       SizedBox(height: 8),
                       Container(
-                        height: 10, // Resim yüksekliği ayarlanabilir
+                        height:
+                            200, // Yüksekliği ayarlanabilir (istediğiniz değeri girin)
                         child: mealData['resim_url'] != null
                             ? Image.network(
                                 mealData['resim_url'],
-                                fit: BoxFit.cover,
+                                fit: BoxFit
+                                    .cover, // Resmi konteynıra tamamen sığdır
                               )
                             : SizedBox.shrink(),
                       ),
@@ -196,7 +210,8 @@ class MealListPage extends StatelessWidget {
                       Text('Tarif: ${mealData['tarif'] ?? ''}'),
                       Text('Yemek Türü: ${mealData['yemek_turu'] ?? ''}'),
                       Text(
-                          'Pişirme Süresi: ${mealData['pisime_s'] ?? ''} dakika'),
+                        'Pişirme Süresi: ${mealData['pisime_s'] ?? ''} dakika',
+                      ),
                     ],
                   ),
                   trailing: trailingWidget,
@@ -241,234 +256,5 @@ class MealListPage extends StatelessWidget {
         ],
       ),
     );
-  }
-}
-
-class SecondPage extends StatefulWidget {
-  @override
-  _SecondPageState createState() => _SecondPageState();
-}
-
-class _SecondPageState extends State<SecondPage> {
-  List<String> selectedTypes = [];
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Color(0xFF90A4AE),
-
-      // appBar: AppBar(
-      //   title: Text('Yemek Türü Seç'),
-      // ),
-      body: Column(
-        children: [
-          CheckboxListTile(
-            title: Text('Çorba'),
-            value: selectedTypes.contains('Çorba'),
-            onChanged: (value) => _onTypeSelected('Çorba', value ?? false),
-          ),
-          CheckboxListTile(
-            title: Text('Salata'),
-            value: selectedTypes.contains('Salata'),
-            onChanged: (value) => _onTypeSelected('Salata', value ?? false),
-          ),
-          CheckboxListTile(
-            title: Text('Ana Yemek'),
-            value: selectedTypes.contains('Ana Yemek'),
-            onChanged: (value) => _onTypeSelected('Ana Yemek', value ?? false),
-          ),
-          CheckboxListTile(
-            title: Text('Tatlı'),
-            value: selectedTypes.contains('Tatlı'),
-            onChanged: (value) => _onTypeSelected('Tatlı', value ?? false),
-          ),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              primary: Color(0xFF535252),
-              shape: RoundedRectangleBorder(),
-              padding: EdgeInsets.all(18.0),
-            ),
-            onPressed: () => _onSearchButtonPressed(context),
-            child: Text('Ara'),
-          ),
-        ],
-      ),
-    );
-  }
-
-  void _onTypeSelected(String type, bool selected) {
-    setState(() {
-      if (selected) {
-        selectedTypes.add(type);
-      } else {
-        selectedTypes.remove(type);
-      }
-    });
-  }
-
-  void _onSearchButtonPressed(BuildContext context) async {
-    if (selectedTypes.isNotEmpty) {
-      var snapshot = await FirebaseFirestore.instance
-          .collection('meals')
-          .where('yemek_turu', whereIn: selectedTypes)
-          .get();
-
-      List<DocumentSnapshot> meals = snapshot.docs;
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => MealListPage(meals),
-        ),
-      );
-    } else {
-      print('Lütfen en az bir yemek türü seçin.');
-    }
-  }
-}
-
-class ThirdPage extends StatefulWidget {
-  @override
-  _ThirdPageState createState() => _ThirdPageState();
-}
-
-class _ThirdPageState extends State<ThirdPage> {
-  TextEditingController calorieController = TextEditingController();
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Color(0xFF78909C),
-      body: Column(
-        children: [
-          SizedBox(height: 16),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: TextField(
-              controller: calorieController,
-              keyboardType: TextInputType.number,
-              decoration: InputDecoration(labelText: 'Kalori Sınırı'),
-            ),
-          ),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              primary: Color(0xFF535252),
-              shape: RoundedRectangleBorder(),
-              padding: EdgeInsets.all(18.0),
-            ),
-            onPressed: () => _onSearchButtonPressed(context),
-            child: Text('Ara'),
-          ),
-        ],
-      ),
-    );
-  }
-
-  void _onSearchButtonPressed(BuildContext context) async {
-    int enteredCalorie = int.tryParse(calorieController.text) ?? 0;
-
-    var snapshot = await FirebaseFirestore.instance
-        .collection('meals')
-        .where('kalori', isLessThanOrEqualTo: enteredCalorie)
-        .get();
-
-    List<DocumentSnapshot> meals = snapshot.docs;
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => MealListPage(meals),
-      ),
-    );
-  }
-}
-
-class FourthPage extends StatefulWidget {
-  @override
-  _FourthPageState createState() => _FourthPageState();
-}
-
-class _FourthPageState extends State<FourthPage> {
-  int selectedTime = 15;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Color(0xFF607D8B),
-      body: Column(
-        children: [
-          SizedBox(height: 16),
-          DropdownButton<int>(
-            value: selectedTime,
-            items: [
-              DropdownMenuItem(
-                value: 15,
-                child: Text('15-30 dakika'),
-              ),
-              DropdownMenuItem(
-                value: 30,
-                child: Text('30-45 dakika'),
-              ),
-              DropdownMenuItem(
-                value: 45,
-                child: Text('45-60 dakika'),
-              ),
-              DropdownMenuItem(
-                value: 60,
-                child: Text('60+ dakika'),
-              ),
-            ],
-            onChanged: (value) {
-              setState(() {
-                selectedTime = value!;
-              });
-            },
-          ),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              primary: Color(0xFF535252),
-              shape: RoundedRectangleBorder(),
-              padding: EdgeInsets.all(18.0),
-            ),
-            onPressed: () => _onSearchButtonPressed(context),
-            child: Text('Ara'),
-          ),
-        ],
-      ),
-    );
-  }
-
-  void _onSearchButtonPressed(BuildContext context) async {
-    print("Selected Time: $selectedTime");
-    var snapshot = await FirebaseFirestore.instance
-        .collection('meals')
-        .where('pisime_s', isGreaterThanOrEqualTo: 30, isLessThanOrEqualTo: 45)
-        .get();
-
-    List<DocumentSnapshot> meals = snapshot.docs;
-    print("Number of meals matching the criteria: ${meals.length}");
-
-    if (meals.isEmpty) {
-      // Eğer hiç yemek bulunamadıysa kullanıcıya bilgi ver
-      showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: Text('Uyarı'),
-          content: Text('Belirtilen sürede yemek bulunamadı.'),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: Text('Tamam'),
-            ),
-          ],
-        ),
-      );
-    } else {
-      // Eğer yemek bulunduysa MealListPage'e yönlendir
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => MealListPage(meals),
-        ),
-      );
-    }
   }
 }
